@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use('/users', authRouter);
+app.use('/', authRouter);
 app.use('/users', userRouter)
 
 export default app;
