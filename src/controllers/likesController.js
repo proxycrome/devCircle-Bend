@@ -1,6 +1,6 @@
 import pkg from 'pg';
 import dotenv from "dotenv";
-import {registeredUser, loggedInUser} from "./AuthController.js"
+import { loggedInUser } from './AuthController.js';
 
 
 const {Pool} = pkg;
@@ -10,6 +10,8 @@ dotenv.config();
 
 
 export const pool = new Pool();
+
+
 
 
 export const getUsers = async (req, res) => {
@@ -59,12 +61,15 @@ export const getPostsUserLiked = async (req, res) => {
     }
 }
 export const addLikeByUser = async (req, res) => {
-    console.log(req.params, req.body);
-    const fromUserId = registeredUser || loggedInUser; 
-    console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
-    console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
-    console.log("fromUserid" + fromUserId)                                                    //add like by current logged in user
-    const toUserId = req.body.toUserId
+    // console.log(req.body);
+    // const userID = loggedInUser();
+    // console.log(userID)
+    // const fromUserId = registeredUser || loggedInUser; 
+    // console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
+    // console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
+    // console.log("fromUserid" + fromUserId)                                                    //add like by current logged in user
+    const {toUserId} = req.body
+    const {fromUserId} = req.params
     
     try{
         let result = await pool.query('INSERT into likes (fromuser_id, touser_id) VALUES ($1, $2) RETURNING *', [fromUserId, toUserId]);
@@ -79,11 +84,12 @@ export const addLikeByUser = async (req, res) => {
     }
 }
 export const deleteLikeByUser = async (req, res) => {
-    const fromUserId = registeredUser|| loggedInUser; 
-    console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
-    console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
-    console.log("fromUserid" + fromUserId)    //delete like by current logged in user
-    const toUserId = +req.body.toUserId;
+    // const fromUserId = registeredUser|| loggedInUser; 
+    // console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
+    // console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
+    // console.log("fromUserid" + fromUserId)    //delete like by current logged in user
+    const {toUserId} = req.body
+    const {fromUserId} = req.params
     try{
         let result = await pool.query('DELETE FROM likes WHERE fromuser_id = $1 AND touser_id = $2', [fromUserId, toUserId]);
         console.log(result)

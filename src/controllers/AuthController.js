@@ -13,8 +13,9 @@ export const pool = new Pool();
 
 dotenv.config();
 
-export const loggedInUser = '';
-export const registeredUser = '';
+ export const loggedInUser = (id) => {
+    return id;
+}
 
 const AuthController = {
     signUp: async (req, res) => {
@@ -42,7 +43,7 @@ const AuthController = {
             const savedUser = await newUser.save();
             
             if(savedUser) {
-                registeredUser = savedUser._id;
+                registeredUser(savedUser._id);
                 jwt.sign({id:savedUser._id}, process.env.JWT_SECRET, {expiresIn: 3600}, (err, token) => {
                     if(err) {
                         throw err;
@@ -80,7 +81,7 @@ const AuthController = {
         console.log(result2, result3);
 
 
-        if(!email && !password) {
+        if(!email || !password) {
             return res.status(400).json({status: 'fail', message: "Provide email and password"});
         }
 
@@ -96,11 +97,11 @@ const AuthController = {
         console.log(isUser.password, password);
         console.log(match); 
 
-        if(match === false) {
+        if(!match) {
             return res.status(400).json({status: 'fail', message: "email or password is incorrect"});
         }
-
-        loggedInUser = isUser._id;
+        
+        loggedInUser(isUser._id);
         jwt.sign({id: isUser._id}, process.env.JWT_SECRET,{expiresIn: 86400}, (err, token) => {
                 
             if(err) {
