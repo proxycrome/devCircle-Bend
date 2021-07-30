@@ -13,8 +13,10 @@ export const pool = new Pool();
 
 dotenv.config();
 
+let userId;
  export const loggedInUser = (id) => {
-    return id;
+     userId = id
+    return userId;
 }
 
 const AuthController = {
