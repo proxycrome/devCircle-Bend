@@ -57,7 +57,7 @@ const AuthController = {
                         email: savedUser.email,
                         github: savedUser.github,
                         facebook: savedUser.facebook,
-                        linkedIn: savedUser.linkedIn,
+                        linkedIn: savedUser.linkedIn, //add gender, renove, add firstname
                         bio: savedUser.bio
                     }, message: "successful"});
                 }); 
