@@ -1,4 +1,6 @@
 import { User } from "../models/UserModel.js";
+import { uploader } from "../config/cloudinaryConfig.js";
+import { datauri } from "../config/multerConfig.js";
 
 
 const UserController = {
@@ -41,11 +43,19 @@ const UserController = {
     },
 
     updateUser: async (req, res) => {
-        const {bio, facebook, linkedIn} = req.body;
+        const file = datauri(req);
+        const result = await uploader.upload(file.content,
+           {
+                dpr: "auto", 
+                responsive: true, 
+                width: "auto", 
+                crop: "scale"
+           });
+        const { bio, facebook, linkedIn } = req.body;
         const {userId} = req.params;
 
         try{
-            const newInputs = await User.findByIdAndUpdate(userId, {bio, facebook, linkedIn}, {new: true});
+            const newInputs = await User.findByIdAndUpdate(userId, { bio, facebook, linkedIn, img_url: result.secure_url }, {new: true});
             const inputs = await newInputs.save();
             if(!inputs) {
                 return res.status(400).json({status: 'fail', message: 'something went wrong'});

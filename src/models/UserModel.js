@@ -30,11 +30,15 @@ const userSchema = new Schema({
     linkedIn: {
         type: String
     },
-    userImage: {
+    img_url: {
         type: String
     },
     bio: {
         type: String
+    },
+    gender: {
+        type: String,
+        required: true
     }
 }, 
 {timestamps: true}
