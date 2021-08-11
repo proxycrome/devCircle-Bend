@@ -5,7 +5,11 @@ const {Schema, model} = mongoose;
 const { isEmail } = validator;
 
 const userSchema = new Schema({
-    name: {
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
         type: String,
         required: true
     },

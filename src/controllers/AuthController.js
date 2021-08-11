@@ -21,12 +21,13 @@ const AuthController = {
     signUp: async (req, res) => {
         try {
         
-            const { name, email, password, github, gender } = req.body; 
+            const { firstName, lastName, email, password, github, gender } = req.body; 
             
 
-            if(!name || !email || !password || !github || !gender) {
+            if( !firstName || !lastName || !email || !password || !github || !gender) {
                 return res.status(400).json({status: 'fail', message: "Please fill all fields"})
             }
+        
 
             // Check if the email already exists
 
@@ -42,7 +43,7 @@ const AuthController = {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             if(hashedPassword){
-                const newUser = new User({ name, email, password: hashedPassword, github, gender })
+                const newUser = new User({ firstName, lastName, email, password: hashedPassword, github, gender })
                 const savedUser = await newUser.save();
                 
                 if(savedUser) {
@@ -53,7 +54,8 @@ const AuthController = {
                         res.status(200).json({status: "success", data: {
                             token: 'Bearer ' + token,
                             id: savedUser._id,
-                            name: savedUser.name,
+                            firstName: savedUser.firstName,
+                            lastName: savedUser.lastName,
                             email: savedUser.email,
                             github: savedUser.github,
                             gender: savedUser.gender
@@ -104,7 +106,8 @@ const AuthController = {
                 return res.status(200).json({status: "success", data: {
                     token: "Bearer " + token,
                     id: isUser._id,
-                    name: isUser.name,
+                    firstName: isUser.firstName,
+                    lastName: isUser.lastName,
                     email: isUser.email,
                     github: isUser.github,
                     gender: isUser.gender
