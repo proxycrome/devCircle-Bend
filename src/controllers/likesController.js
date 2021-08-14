@@ -13,7 +13,6 @@ export const pool = new Pool();
 
 
 
-
 export const getUsers = async (req, res) => {
     try{
         let result = await pool.query('SELECT * FROM users');
@@ -24,8 +23,8 @@ export const getUsers = async (req, res) => {
             users: result.rows
         
         })
-    } catch(e){
-        console.log(e);
+    } catch(err){
+        res.status(500).json({status: "fail", message: 'server error', err});
     }
 } 
 
@@ -57,7 +56,7 @@ export const getPostsUserLiked = async (req, res) => {
             
         })
     } catch(e){
-        console.log(e)
+        res.status(500).json({status: "fail", message: 'server error', err});
     }
 }
 export const addLikeByUser = async (req, res) => {
@@ -79,8 +78,8 @@ export const addLikeByUser = async (req, res) => {
             result: result.rows.length,
             like: result.rows
         })
-    } catch(e){
-        console.log(e)
+    } catch(err){
+        res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
 export const deleteLikeByUser = async (req, res) => {
@@ -98,8 +97,8 @@ export const deleteLikeByUser = async (req, res) => {
             result: result.rows.length,
             like: result.rows
         })
-    } catch(e){
-        console.log(e)
+    } catch(err){
+        res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
 export const getLikesOnAllUsers = async (req, res) => {
@@ -112,10 +111,11 @@ export const getLikesOnAllUsers = async (req, res) => {
             result: result.rows.length,
             likes: result.rows
         })
-    } catch(e){
-        console.log(e)
+    } catch(err){
+        res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
+
 export const getLikesOnUser = async (req, res) => {
     const toUserId = req.params.id;
     try{
@@ -126,8 +126,8 @@ export const getLikesOnUser = async (req, res) => {
             result: result.rows.length,
             likes: result.rows
         })
-    } catch(e){
-        console.log(e)
+    } catch(err){
+        res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
 

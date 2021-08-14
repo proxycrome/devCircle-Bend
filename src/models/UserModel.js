@@ -5,7 +5,11 @@ const {Schema, model} = mongoose;
 const { isEmail } = validator;
 
 const userSchema = new Schema({
-    name: {
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
         type: String,
         required: true
     },
@@ -30,11 +34,15 @@ const userSchema = new Schema({
     linkedIn: {
         type: String
     },
-    userImage: {
+    img_url: {
         type: String
     },
     bio: {
         type: String
+    },
+    gender: {
+        type: String,
+        required: true
     }
 }, 
 {timestamps: true}
