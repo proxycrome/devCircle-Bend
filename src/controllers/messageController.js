@@ -18,3 +18,4 @@ const getChat = {
     }
 }
 
+export default getChat;
