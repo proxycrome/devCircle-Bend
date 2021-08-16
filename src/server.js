@@ -11,6 +11,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use('/', (req, res) => {
+    res.send('Hello World');
+});
+
 //added versioning to routes
 app.use('/api/v1', likesRouter);
 app.use('/api/v1', authRouter);
