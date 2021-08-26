@@ -1,21 +1,20 @@
 import pkg from 'pg';
 import dotenv from "dotenv";
-import { loggedInUser } from './AuthController.js';
 
 
-const {Pool} = pkg;
+
+// const {Pool} = pkg;
 
 
 dotenv.config();
 
 
-export const pool = new Pool();
 
 
 
 export const getUsers = async (req, res) => {
     try{
-        let result = await pool.query('SELECT * FROM users');
+        let result = await client.query('SELECT * FROM users');
         console.log(result)
         res.status(200).json({
             status: "success",
@@ -31,7 +30,7 @@ export const getUsers = async (req, res) => {
 // export const addUser = async (req, res) => {
 //     const {userId, userName} = req.body;
 //     try{
-//         let result = await pool.query('INSERT into users (user_id, user_name) VALUES ($1, $2) RETURNING *', [userId, userName]);
+//         let result = await client.query('INSERT into users (user_id, user_name) VALUES ($1, $2) RETURNING *', [userId, userName]);
 //         console.log(result)
 //         res.status(200).json({
 //             status: "success",
@@ -47,7 +46,7 @@ export const getUsers = async (req, res) => {
 export const getPostsUserLiked = async (req, res) => {
     const fromUserId = req.params.fromUserId
     try{
-        let result = await pool.query('SELECT * FROM likes WHERE fromuser_id = $1', [fromUserId])
+        let result = await client.query('SELECT * FROM likes WHERE from_user_id = $1', [fromUserId])
         console.log(result)
         res.status(200).json({
             status: "success",
@@ -71,7 +70,7 @@ export const addLikeByUser = async (req, res) => {
     const {fromUserId} = req.params
     
     try{
-        let result = await pool.query('INSERT into likes (fromuser_id, touser_id) VALUES ($1, $2) RETURNING *', [fromUserId, toUserId]);
+        let result = await client.query('INSERT into likes (from_user_id, to_user_id) VALUES ($1, $2) RETURNING *', [fromUserId, toUserId]);
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -90,12 +89,12 @@ export const deleteLikeByUser = async (req, res) => {
     const {toUserId} = req.body
     const {fromUserId} = req.params
     try{
-        let result = await pool.query('DELETE FROM likes WHERE fromuser_id = $1 AND touser_id = $2', [fromUserId, toUserId]);
+        let result = await client.query('DELETE FROM likes WHERE from_user_id = $1 AND to_user_id = $2', [fromUserId, toUserId]);
         console.log(result)
         res.status(200).json({
             status: "success",
             result: result.rows.length,
-            like: result.rows
+            data: result.rows
         })
     } catch(err){
         res.status(500).json({status: "fail", message: 'server error', err})
@@ -104,12 +103,12 @@ export const deleteLikeByUser = async (req, res) => {
 export const getLikesOnAllUsers = async (req, res) => {
    
     try{
-        let result = await pool.query('SELECT * FROM likes ORDER BY id')
+        let result = await client.query('SELECT * FROM likes ORDER BY id')
         console.log(result)
         res.status(200).json({
             status: "success",
             result: result.rows.length,
-            likes: result.rows
+            data: result.rows
         })
     } catch(err){
         res.status(500).json({status: "fail", message: 'server error', err})
@@ -119,11 +118,11 @@ export const getLikesOnAllUsers = async (req, res) => {
 export const getLikesOnUser = async (req, res) => {
     const toUserId = req.params.id;
     try{
-        let result = await pool.query('SELECT * FROM likes WHERE touser_id = $1', [toUserId])
+        let result = await client.query('SELECT * FROM likes WHERE to_user_id = $1', [toUserId])
         console.log(result)
         res.status(200).json({
             status: "success",
-            result: result.rows.length,
+            likesCount: result.rows.length,
             likes: result.rows
         })
     } catch(err){

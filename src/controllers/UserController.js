@@ -32,11 +32,16 @@ const UserController = {
     },
 
     getUserById: async (req, res) => {
+        console.log('entered get user controller')
+        console.log(req.params)
         const {userId} = req.params;
+        console.log(2)
         try{
             const user = await User.findById(userId).lean().exec();
+            console.log(3)
             return res.status(201).json({status: 'success', message: 'successful', data: user})
         }catch(err){
+            console.log(4)
             return res.status(500).json({status: 'fail', message: 'server error', err})
         }
         
