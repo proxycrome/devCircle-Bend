@@ -51,7 +51,6 @@ const AuthController = {
             
                 console.log("4")
                 if(savedUser) {
-                    
                     // registeredUser(savedUser._id);
                     jwt.sign({id:savedUser._id}, process.env.JWT_SECRET, {expiresIn: 3600}, (err, token) => {
                         if(err) {
