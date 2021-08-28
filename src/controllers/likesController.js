@@ -43,6 +43,7 @@ export const getUsers = async (req, res) => {
 //     }
 // } 
 
+
 export const getPostsUserLiked = async (req, res) => {
     const fromUserId = req.params.fromUserId
     try{
@@ -54,18 +55,13 @@ export const getPostsUserLiked = async (req, res) => {
             posts: result.rows
             
         })
-    } catch(e){
+    } catch(err){
         res.status(500).json({status: "fail", message: 'server error', err});
     }
 }
+
+
 export const addLikeByUser = async (req, res) => {
-    // console.log(req.body);
-    // const userID = loggedInUser();
-    // console.log(userID)
-    // const fromUserId = registeredUser || loggedInUser; 
-    // console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
-    // console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
-    // console.log("fromUserid" + fromUserId)                                                    //add like by current logged in user
     const {toUserId} = req.body
     const {fromUserId} = req.params
     
@@ -81,11 +77,9 @@ export const addLikeByUser = async (req, res) => {
         res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
+
+
 export const deleteLikeByUser = async (req, res) => {
-    // const fromUserId = registeredUser|| loggedInUser; 
-    // console.log("registeredUser" + registeredUser)                                                    //add like by current logged in user
-    // console.log("loggedInUser" + loggedInUser)                                                    //add like by current logged in user
-    // console.log("fromUserid" + fromUserId)    //delete like by current logged in user
     const {toUserId} = req.body
     const {fromUserId} = req.params
     try{
@@ -100,6 +94,8 @@ export const deleteLikeByUser = async (req, res) => {
         res.status(500).json({status: "fail", message: 'server error', err})
     }
 }
+
+
 export const getLikesOnAllUsers = async (req, res) => {
    
     try{

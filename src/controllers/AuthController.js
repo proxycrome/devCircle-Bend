@@ -2,13 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { User } from '../models/UserModel.js';
-import pkg from 'pg';
-
-
-const {Pool} = pkg;
-
-export const pool = new Pool();
-
 
 
 dotenv.config();
@@ -51,7 +44,6 @@ const AuthController = {
             
                 console.log("4")
                 if(savedUser) {
-                    // registeredUser(savedUser._id);
                     jwt.sign({id:savedUser._id}, process.env.JWT_SECRET, {expiresIn: 3600}, (err, token) => {
                         if(err) {
                             throw err;
@@ -68,11 +60,11 @@ const AuthController = {
                     }); 
                 } 
                 //If user is saved add user id to postgres database users table
-                try {
-                let result = await pool.query('INSERT into users (user_id, user_name) VALUES ($1, $2) RETURNING *', [savedUser._id, savedUser.name]);
-                } catch(e){
-                    console.log(e);
-                }   
+                // try {
+                // let result = await pool.query('INSERT into users (user_id, user_name) VALUES ($1, $2) RETURNING *', [savedUser._id, savedUser.name]);
+                // } catch(e){
+                //     console.log(e);
+                // }   
             }
         } catch(error){
             res.status(500).json({status: "fail", message: "server err", error});
@@ -101,7 +93,6 @@ const AuthController = {
                 return res.status(400).json({status: 'fail', message: "email or password is incorrect"});
             }
             
-            // loggedInUser(isUser._id);
             jwt.sign({id: isUser._id}, process.env.JWT_SECRET,{expiresIn: 86400}, (err, token) => {
                     
                 if(err) {
