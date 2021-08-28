@@ -1,4 +1,6 @@
 import { User } from "../models/UserModel.js";
+import { uploader } from "../config/cloudinaryConfig.js";
+import { datauri } from "../config/multerConfig.js";
 
 
 const UserController = {
@@ -30,22 +32,35 @@ const UserController = {
     },
 
     getUserById: async (req, res) => {
+        console.log('entered get user controller')
+        console.log(req.params)
         const {userId} = req.params;
+        console.log(2)
         try{
             const user = await User.findById(userId).lean().exec();
+            console.log(3)
             return res.status(201).json({status: 'success', message: 'successful', data: user})
         }catch(err){
+            console.log(4)
             return res.status(500).json({status: 'fail', message: 'server error', err})
         }
         
     },
 
     updateUser: async (req, res) => {
-        const {bio, facebook, linkedIn} = req.body;
+        const file = datauri(req);
+        const result = await uploader.upload(file.content,
+           {
+                dpr: "auto", 
+                responsive: true, 
+                width: "auto", 
+                crop: "scale"
+           });
+        const { bio, facebook, linkedIn } = req.body;
         const {userId} = req.params;
 
         try{
-            const newInputs = await User.findByIdAndUpdate(userId, {bio, facebook, linkedIn}, {new: true});
+            const newInputs = await User.findByIdAndUpdate(userId, { bio, facebook, linkedIn, img_url: result.secure_url }, {new: true});
             const inputs = await newInputs.save();
             if(!inputs) {
                 return res.status(400).json({status: 'fail', message: 'something went wrong'});
