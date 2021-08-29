@@ -24,7 +24,7 @@ io.on("connection", (socket) =>{
        const {sender, receiver, message, time, read} = data;
         const socketId = getUserSocket(data.receiver); //to socket
         if(socketId){
-            io.to(socketId).emit("newMessage", data);  
+            io.to(socketId).emit("newMessage", data); 
         }
         try {
             let result = await pool.query('INSERT into messages (sender, receiver, message, time, read) VALUES ($1, $2, $3, $4, $5) RETURNING *', [sender, receiver, message, time, read]);
