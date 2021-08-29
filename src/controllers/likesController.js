@@ -1,9 +1,7 @@
-import pkg from 'pg';
+import client from "../database/linkesIndex.js";
 import dotenv from "dotenv";
 
 
-
-// const {Pool} = pkg;
 
 
 dotenv.config();
